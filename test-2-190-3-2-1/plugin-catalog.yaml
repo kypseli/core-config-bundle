@@ -1,0 +1,9 @@
+type: plugin-catalog
+version: '1'
+name: chuck-norris-catalog
+displayName: Chuck Norris Catalog
+configurations:
+- description: chuck-norris
+  includePlugins:
+    chuck-norris:
+      version: 1.2
