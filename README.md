@@ -15,3 +15,11 @@ kubectl cp --namespace core test-2-190-3-2-1 cjoc-0:/var/jenkins_home/jcasc-bund
 kubectl exec --namespace core cjoc-0 -- \
 ls /var/jenkins_home/jcasc-bundles-store | grep -v security.xml
 ```
+
+
+kubectl cp --namespace core \
+cjoc-0:/var/jenkins_home/jcasc-bundles-store/security.xml security.xml
+
+
+kubectl cp --namespace core security.xml \
+cjoc-0:/var/jenkins_home/jcasc-bundles-store/security.xml
