@@ -1,5 +1,5 @@
 id: "chuck-norris-bundle"
-version: "1"
+version: "2"
 description: "A simple bundle that sets up a master with the Chuck Norris plugin"
 plugins:
   - "plugins.yaml"
