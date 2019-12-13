@@ -1,0 +1,35 @@
+library 'kypseli@master'
+def podYaml = libraryResource 'podtemplates/kubectl.yml'
+pipeline {
+  agent {
+    kubernetes {
+      label 'demo-mm-casc'
+      defaultContainer 'jnlp'
+      yaml podYaml
+    }
+  }
+  stages {
+    stage('Merge Base and Update Config Bundle') {
+      steps {
+        echo "preparing to reload config bundle for ${BRANCH_NAME}"
+        sh("wget -O base-jenkins.yml https://raw.githubusercontent.com/kypseli/core-config-bundle/master/base/jenkins.yml")
+        sh("yq m -a -i jenkins.yml base-jenkins.yml")
+        container('kubectl') {   
+          sh("kubectl cp --namespace core . cjoc-0:/var/jenkins_home/jcasc-bundles-store/${BRANCH_NAME}")
+        }
+      }
+    }    
+    stage('reload jcasc') {
+      steps {
+        echo "preparing Jenkins CLI"
+        sh 'curl -O http://ops.mm-ops.svc.cluster.local/ops/jnlpJars/jenkins-cli.jar'
+        withCredentials([usernamePassword(credentialsId: 'cli-username-token', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+          sh """
+            alias cli='java -jar jenkins-cli.jar -s \'http://ops.mm-ops.svc.cluster.local/ops/\' -auth $USERNAME:$PASSWORD'
+            cli reload-jcasc-configuration
+          """
+        }
+      }
+    }
+  }
+}
