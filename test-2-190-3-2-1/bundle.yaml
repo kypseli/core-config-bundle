@@ -1,9 +1,0 @@
-id: "chuck-norris-bundle"
-version: "2"
-description: "A simple bundle that sets up a master with the Chuck Norris plugin"
-plugins:
-  - "plugins.yaml"
-jcasc:
-  - "jenkins.yaml"
-catalog:
-  - "plugin-catalog.yaml"
